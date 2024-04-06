@@ -3,9 +3,11 @@ import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 import {Layout} from './components/layouts'
 import { useNotificationProvider } from "@refinedev/antd";
+import { EditPage } from "./pages";
 import "@refinedev/antd/dist/reset.css";
 import {dataProvider,liveProvider} from "./Providers";
-
+import {CompanyList} from "./pages";
+import { List } from "./pages/tasks/list";
 import routerBindings, {
     CatchAllNavigate,
     DocumentTitleHandler,
@@ -17,6 +19,10 @@ import {BrowserRouter, Outlet, Route, Routes} from "react-router-dom";
 
 import {authProvider} from "./Providers";
 import {Home,ForgotPassword,Login,Register} from "./pages";
+import { resources } from "./config/resources";
+import {CompanyCreate } from "./pages/company/create";
+import { CreateTask } from "./pages/tasks/create";
+import { EditTask } from "./pages/tasks/edit";
 
 
 function App() {
@@ -32,6 +38,7 @@ function App() {
                 notificationProvider={useNotificationProvider}
                 routerProvider={routerBindings}
                 authProvider={authProvider}
+                resources={resources}
                 options={{
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
@@ -56,9 +63,22 @@ function App() {
                          </Layout>
                         </Authenticated>
                     }>
-                        <Route index element={<Home/>}/>
+                       <Route index element={<Home/>}/>
+                        <Route path="/companies" >
+                          <Route index element={<CompanyList/>}/>
+                          <Route path="/companies/create" element={<CompanyCreate/>}/>
+                          <Route path="edit/:id" element={<EditPage/>}/>
+                        </Route> 
+                        <Route path="/tasks" element={<List>
+                          <Outlet />
+                        </List>}>
+                        <Route path="new" element={<CreateTask/>}/>
+                          <Route path="edit/:id" element={<EditTask/>}/>
                     </Route>
-                </Routes>
+                          
+                    </Route>
+                    
+                </Routes>       
                 <RefineKbar />
                 <UnsavedChangesNotifier />
                 <DocumentTitleHandler />
