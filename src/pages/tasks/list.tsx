@@ -4,10 +4,9 @@ import { KanbanBoardContainer,KanbanBoard} from '@/components/tasks/kanban/board
 import { KanbanColumn } from '@/components/tasks/kanban/column'
 import { KanbanItem } from '@/components/tasks/kanban/item'
 import { useList, useUpdate } from '@refinedev/core'
-import { TaskStage } from '@/graphql/schema.types'
 import { TASKS_QUERY, TASK_STAGES_QUERY } from '@/graphql/queries'
 import { GetFieldsFromList } from '@refinedev/nestjs-query'
-import { TasksQuery } from '@/graphql/types'
+import { TaskStagesQuery, TasksQuery } from '@/graphql/types'
 import { KanbanAddCardButton } from '@/components/tasks/kanban/add-card-button'
 import { ProjectCard, ProjectCardMemo } from '@/components/tasks/kanban/card'
 import { KanbanColumnSkeleton, ProjectCardSkeleton } from '@/components'
@@ -15,9 +14,12 @@ import Item from 'antd/es/list/Item'
 import { CreateTask } from './create'
 import { UPDATE_TASK_STAGE_MUTATION } from '@/graphql/mutations'
 import { useNavigation } from '@refinedev/core'
+
+type Task = GetFieldsFromList<TasksQuery>
+type TaskStage = GetFieldsFromList<TaskStagesQuery> & { tasks: Task[] }
 export const List = ({children}:React.PropsWithChildren) => {
   const {replace}=useNavigation();
-  const {data: stages,isLoadingStages}=useList<TaskStage>({
+  const {data: stages,isLoading: isLoadingStages}=useList<TaskStage>({
     resource:'taskStages',
     meta: {
       gqlQuery:TASK_STAGES_QUERY
