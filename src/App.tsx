@@ -77,13 +77,11 @@ function App() {
                     </Route>
                           
                     </Route>
-                    
                 </Routes>       
                 <RefineKbar />
                 <UnsavedChangesNotifier />
                 <DocumentTitleHandler />
               </Refine>
-              <DevtoolsPanel />
             </DevtoolsProvider>
           </AntdApp>
       </RefineKbarProvider>
